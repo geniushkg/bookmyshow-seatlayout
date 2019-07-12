@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             val locOnScreen = IntArray(2)
             tblContainer.getLocationOnScreen(locOnScreen)
             val rectOfTbl = HelperUtils.locateViewWithZoom(tblContainer,engine.realZoom)
-            val rectOfZLayout = HelperUtils.locateView(zllib)
+            val rectVisibleArea = HelperUtils.locateView(zllib)
 
             Log.d("CustomListener","Child left ${tblContainer.left} right ${tblContainer.right}")
            // Log.d("CustomListener","visible left ${reactActualVisible.left} right ${reactActualVisible.right}")
@@ -133,12 +133,51 @@ class MainActivity : AppCompatActivity() {
             Log.d("CustomListener","loc left  ${rectOfTbl.left} loc right ${rectOfTbl.right}")
             Log.d("CustomListener","loc top  ${rectOfTbl.top} loc bottom ${rectOfTbl.bottom}")
 
-            Log.d("CustomListener"," loc zl left ${rectOfZLayout.left}  loc zl right ${rectOfZLayout.right}")
-            Log.d("CustomListener"," loc zl top ${rectOfZLayout.top}  loc zl bottom ${rectOfZLayout.bottom}")
+            Log.d("CustomListener"," loc zl left ${rectVisibleArea.left}  loc zl right ${rectVisibleArea.right}")
+            Log.d("CustomListener"," loc zl top ${rectVisibleArea.top}  loc zl bottom ${rectVisibleArea.bottom}")
 
-            val rectOnPreview = Rect()
 
-            val bitmap = HelperUtils.getBitmapFromView(tblContainer,0,0,0,0)
+
+            val rectOnPreviewZoomed = Rect()
+            var leftDif=0
+            var topDif=0
+            var rightDif=0
+            var bottomDif=0
+
+            if (rectOfTbl.left<rectVisibleArea.left){
+                leftDif=rectVisibleArea.left-rectOfTbl.left
+            }else{
+                leftDif=0
+            }
+
+            if (rectOfTbl.top<rectVisibleArea.top){
+                topDif=rectVisibleArea.top-rectOfTbl.top
+            }else{
+                topDif=0
+            }
+
+            if (rectOfTbl.right>rectVisibleArea.right){
+                rightDif=rectOfTbl.right-rectVisibleArea.right
+            }else{
+                rightDif=0
+            }
+
+            if (rectOfTbl.bottom>rectVisibleArea.bottom){
+                bottomDif=rectOfTbl.bottom-rectVisibleArea.bottom
+            }else{
+                bottomDif=0
+            }
+
+            //scale back to original values
+            if (engine.realZoom>1.0) {
+                if (leftDif!=0) leftDif = Math.round(leftDif / engine.realZoom)
+                if (topDif!=0)  topDif = Math.round(topDif / engine.realZoom)
+                if (rightDif!=0) rightDif = Math.round(rightDif / engine.realZoom)
+                if (bottomDif !=0) bottomDif = Math.round(bottomDif/engine.realZoom)
+            }
+
+            val bitmap = HelperUtils.getBitmapFromView(tblContainer,
+                leftDif,topDif,rightDif,bottomDif)
 
             ivPreview.layoutParams.height=calculatedHeight
             ivPreview.layoutParams.width=calculatedWidth

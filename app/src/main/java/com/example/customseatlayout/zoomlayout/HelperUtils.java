@@ -6,15 +6,15 @@ import android.view.View;
 
 public class HelperUtils {
 
-    public static Bitmap getBitmapFromView(View view,int left,
-                                           int top,int right,int bottom) {
+    public static Bitmap getBitmapFromView(View view,int leftDiffrence,
+                                           int topDifference,int rightDifference,int bottomDifference) {
         //Define a bitmap with the same size as the view
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
         //Bind a canvas to it
-        int defaultleft = 0;
-        int defaulttop = 0;
-        int viewWidth = view.getWidth();
-        int viewHeight = view.getHeight();
+        int left = leftDiffrence;
+        int top = topDifference;
+        int viewWidth = view.getWidth()-rightDifference;
+        int viewHeight = view.getHeight()-bottomDifference;
         Canvas canvas = new Canvas(returnedBitmap);
         //Get the view's background
         Drawable bgDrawable =view.getBackground();
@@ -30,7 +30,7 @@ public class HelperUtils {
         myPaint.setColor(Color.rgb(0, 0, 0));
         myPaint.setStrokeWidth(10);
         myPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(0, 0, viewWidth, viewHeight, myPaint);
+        canvas.drawRect(left, top, viewWidth, viewHeight, myPaint);
 
 
         // draw the view on the canvas
