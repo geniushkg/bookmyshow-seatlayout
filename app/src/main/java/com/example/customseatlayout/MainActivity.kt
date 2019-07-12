@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
             val rectOnPreview = Rect()
 
-            val bitmap = HelperUtils.getBitmapFromView(tblContainer)
+            val bitmap = HelperUtils.getBitmapFromView(tblContainer,0,0,0,0)
 
             ivPreview.layoutParams.height=calculatedHeight
             ivPreview.layoutParams.width=calculatedWidth
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
             child.getGlobalVisibleRect(reactActualVisible)
             val widthOfDraw = reactActualVisible.right-reactActualVisible.left
             val heightOfDraw = reactActualVisible.bottom-reactActualVisible.top
-            val bitmap = HelperUtils.getBitmapFromView(child)
+            //val bitmap = HelperUtils.getBitmapFromView(child)
             val calculatedHeight = child.height/2
             val calculatedWidth = child.width/2
             val locOnScreen = IntArray(2)
@@ -172,7 +172,7 @@ class MainActivity : AppCompatActivity() {
             ivPreview.layoutParams.width=calculatedWidth+10
             ivGradientBg.layoutParams.height=calculatedHeight+10
             ivGradientBg.layoutParams.width=calculatedWidth+10
-            ivPreview.setImageBitmap(bitmap)
+           // ivPreview.setImageBitmap(bitmap)
             ivGradientBg.visibility=View.VISIBLE
             ivPreview.visibility=View.VISIBLE
             hidePreviewLayoutsAftersometime()
