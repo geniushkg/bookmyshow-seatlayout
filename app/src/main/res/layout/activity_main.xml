@@ -6,24 +6,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
-                <com.example.customseatlayout.zoomlayout.ZoomLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:id="@+id/zlContainer">
 
-                    <TableLayout
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:id="@+id/tblSeatsContainer"
-                             android:layout_gravity="center"/>
+    <com.otaliastudios.zoom.ZoomLayout
+            android:id="@+id/zllib"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:scrollbars="vertical|horizontal"
+            app:hasClickableChildren="true"
+            app:horizontalPanEnabled="true"
+            app:overPinchable="true"
+            app:transformation="centerInside"
+            app:minZoom="0.7"
+            app:minZoomType="zoom"
+            app:maxZoom="8.5"
+            app:maxZoomType="zoom"
+            app:verticalPanEnabled="true"
+            app:zoomEnabled="true"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-                </com.example.customseatlayout.zoomlayout.ZoomLayout>
+        <HorizontalScrollView
+                android:id="@+id/hori_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fadeScrollbars="false"
+                android:fillViewport="true"
+                android:padding="16dp">
+
+        <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tblSeatsContainer"
+                android:layout_gravity="center"/>
+
+        </HorizontalScrollView>
+
+    </com.otaliastudios.zoom.ZoomLayout>
 
     <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:padding="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +56,7 @@
 
     <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:padding="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

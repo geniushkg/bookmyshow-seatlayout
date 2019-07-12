@@ -101,7 +101,7 @@ public class ZoomLayout extends FrameLayout implements ScaleGestureDetector.OnSc
           dx = Math.min(Math.max(dx, -maxDx), maxDx);
           dy = Math.min(Math.max(dy, -maxDy), maxDy);
           Log.i(TAG, "Width: " + child().getWidth() + ", scale " + scale + ", dx " + dx
-            + ", max " + maxDx);
+            + ",dy "+dy+" , max " + maxDx);
           applyScaleAndTranslation();
         }
 
