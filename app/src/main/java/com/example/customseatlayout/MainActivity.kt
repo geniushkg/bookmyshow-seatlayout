@@ -2,7 +2,6 @@ package com.example.customseatlayout
 
 import android.content.Context
 import android.graphics.Matrix
-import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -15,28 +14,24 @@ import com.example.customseatlayout.model.RowData
 import com.example.customseatlayout.model.SeatData
 import com.example.customseatlayout.model.SeatsResponse
 import com.example.customseatlayout.zoomlayout.HelperUtils
-import com.example.customseatlayout.zoomlayout.ZoomLayout
-import com.example.customseatlayout.zoomlayout.ZoomListener
 import com.otaliastudios.zoom.ZoomEngine
 
 class MainActivity : AppCompatActivity() {
 
 
-    private fun hidePreviewLayoutsAftersometime() {
-         Handler().postDelayed({
-             ivGradientBg.visibility=View.GONE
-             ivPreview.visibility=View.GONE
-         },300)
-    }
+
 
     private var apiResponse:SeatsResponse = getDummyData()
     private  lateinit var tblContainer:TableLayout
-    private lateinit var zlContainer:ZoomLayout
     private lateinit var ivPreview:ImageView
     private lateinit var ivGradientBg:ImageView
     private var context:Context=this
     private lateinit var zllib:com.otaliastudios.zoom.ZoomLayout
-
+    private var counter = 0
+    /**
+     * this method is for populating data, in real project
+     * data should be coming from api response
+     */
     private fun getDummyData(): SeatsResponse {
 
         var rowList = ArrayList<RowData>()
@@ -69,8 +64,6 @@ class MainActivity : AppCompatActivity() {
         ivPreview = findViewById(R.id.ivPreview)
         ivGradientBg = findViewById(R.id.ivGradientBg)
         tblContainer = findViewById(R.id.tblSeatsContainer)
-        //zlContainer = findViewById(R.id.zlContainer)
-        //zlContainer.setListener(zoomListener)
         zllib = findViewById(R.id.zllib)
         zllib.engine.addListener(zlliblistener)
         setupSeatLayout(apiResponse)
@@ -118,27 +111,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onUpdate(engine: ZoomEngine, matrix: Matrix) {
+            counter++
+            if (counter>1000){
+                counter=0
+                return
+            }
+            if (counter%3==0){
+                return
+            }
 
 
             val calculatedHeight = tblContainer.height/4
             val calculatedWidth = tblContainer.width/4
-            val locOnScreen = IntArray(2)
-            tblContainer.getLocationOnScreen(locOnScreen)
             val rectOfTbl = HelperUtils.locateViewWithZoom(tblContainer,engine.realZoom)
             val rectVisibleArea = HelperUtils.locateView(zllib)
 
-            Log.d("CustomListener","Child left ${tblContainer.left} right ${tblContainer.right}")
-           // Log.d("CustomListener","visible left ${reactActualVisible.left} right ${reactActualVisible.right}")
-            Log.d("CustomListener","loc x ${locOnScreen[0]} y ${locOnScreen[1]}")
+            // this comments are for understanding purpose only
             Log.d("CustomListener","loc left  ${rectOfTbl.left} loc right ${rectOfTbl.right}")
             Log.d("CustomListener","loc top  ${rectOfTbl.top} loc bottom ${rectOfTbl.bottom}")
-
             Log.d("CustomListener"," loc zl left ${rectVisibleArea.left}  loc zl right ${rectVisibleArea.right}")
             Log.d("CustomListener"," loc zl top ${rectVisibleArea.top}  loc zl bottom ${rectVisibleArea.bottom}")
 
 
-
-            val rectOnPreviewZoomed = Rect()
             var leftDif=0
             var topDif=0
             var rightDif=0
@@ -176,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                 if (bottomDif !=0) bottomDif = Math.round(bottomDif/engine.realZoom)
             }
 
+            // genarate bitmap image of layout with rectangle
             val bitmap = HelperUtils.getBitmapFromView(tblContainer,
                 leftDif,topDif,rightDif,bottomDif)
 
@@ -190,32 +185,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private var zoomListener:ZoomListener = object : ZoomListener{
-        override fun onChildUpdated(child: View) {
-
-            val reactActualVisible = Rect()
-            child.getGlobalVisibleRect(reactActualVisible)
-            val widthOfDraw = reactActualVisible.right-reactActualVisible.left
-            val heightOfDraw = reactActualVisible.bottom-reactActualVisible.top
-            //val bitmap = HelperUtils.getBitmapFromView(child)
-            val calculatedHeight = child.height/2
-            val calculatedWidth = child.width/2
-            val locOnScreen = IntArray(2)
-            child.getLocationOnScreen(locOnScreen)
-
-            Log.d("CustomListener","Child left ${child.left} right ${child.right}")
-            Log.d("CustomListener","visible left ${reactActualVisible.left} right ${reactActualVisible.right}")
-            Log.d("CustomListener","loc x ${locOnScreen[0]} y ${locOnScreen[1]}")
-
-            ivPreview.layoutParams.height=calculatedHeight+10
-            ivPreview.layoutParams.width=calculatedWidth+10
-            ivGradientBg.layoutParams.height=calculatedHeight+10
-            ivGradientBg.layoutParams.width=calculatedWidth+10
-           // ivPreview.setImageBitmap(bitmap)
-            ivGradientBg.visibility=View.VISIBLE
-            ivPreview.visibility=View.VISIBLE
-            hidePreviewLayoutsAftersometime()
-
-        }
+    /**
+     * This method will hide preview layout after specified time
+     */
+    private fun hidePreviewLayoutsAftersometime() {
+        Handler().postDelayed({
+            ivGradientBg.visibility=View.GONE
+            ivPreview.visibility=View.GONE
+        },900)
     }
 }

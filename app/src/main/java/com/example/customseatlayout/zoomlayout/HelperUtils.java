@@ -6,6 +6,15 @@ import android.view.View;
 
 public class HelperUtils {
 
+    /**
+     * This method will return bitmap image of seatlayout with rectangle drawn to preview
+     * @param view input view whose image needs to be previewed
+     * @param leftDiffrence rectangle left margin
+     * @param topDifference rectangle top margin
+     * @param rightDifference rectangel right margin
+     * @param bottomDifference rectange bottom margin
+     * @return bitmap with rectangel drawn on top of it
+     */
     public static Bitmap getBitmapFromView(View view,int leftDiffrence,
                                            int topDifference,int rightDifference,int bottomDifference) {
         //Define a bitmap with the same size as the view
@@ -39,6 +48,12 @@ public class HelperUtils {
         return returnedBitmap;
     }
 
+    /**
+     * This method will return cordinates of view after zoom as rectangle
+     * @param view input view whose cordinates are required
+     * @param realZoom input scale or current zoomed factor of view
+     * @return rect cordinates of zoomed view
+     */
     public static Rect locateViewWithZoom(View view, float realZoom) {
         Rect loc = new Rect();
         int[] location = new int[2];
@@ -57,6 +72,11 @@ public class HelperUtils {
     }
 
 
+    /**
+     * Will return cordinates of view passed
+     * @param view input view whose cordinates needs to be calculated
+     * @return rect with cordinates of view
+     */
     public static Rect locateView(View view) {
         Rect loc = new Rect();
         int[] location = new int[2];
@@ -71,19 +91,4 @@ public class HelperUtils {
         loc.bottom = loc.top + view.getHeight();
         return loc;
     }
-
-    /* to check if view is visible just helper code only for refrence not used
-    public static boolean isVisible(final View view) {
-        if (view == null) {
-            return false;
-        }
-        if (!view.isShown()) {
-            return false;
-        }
-        final Rect actualPosition = new Rect();
-        view.getGlobalVisibleRect(actualPosition);
-        final Rect screen = new Rect(0, 0, getScreenWidth(), getScreenHeight());
-        return actualPosition.intersect(screen);
-    }
-    */
 }
